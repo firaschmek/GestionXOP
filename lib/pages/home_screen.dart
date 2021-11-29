@@ -97,14 +97,22 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 180.0, width: 180.0, fit: BoxFit.fill),
                         ),
                       ),
-                      Center(
-                          child: Text(
-                        searchResults[index].name,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      )),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ProductsScreen(searchResults[index].name)),
+                          );
+                        },
+                        child: Center(
+                            child: Text(
+                          searchResults[index].name,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        )),
+                      ),
                     ],
                   ),
                 );

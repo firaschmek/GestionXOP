@@ -1,8 +1,11 @@
 
-import 'package:appgestion/model/product.dart';
-import 'package:appgestion/pages/product_detail.dart';
+import 'package:appgestion/details/details_screen.dart';
+import 'package:appgestion/model/Product.dart';
+import 'package:appgestion/constant/constants.dart';
 import 'package:appgestion/providers/product_provider.dart';
 import 'package:flutter/material.dart';
+
+import 'item_card.dart';
 
 
 class ProductsScreen extends StatefulWidget {
@@ -101,38 +104,26 @@ List<Product> selectProduct(String name)
             ),
           ),
           Expanded(
-            child: GridView.count(
-              crossAxisCount: 2,
-              children: List.generate(searchResults.length, (index) {
-                return Container(
-                  padding: EdgeInsets.all(30),
-                  child: Stack(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ProductDetail(searchResults[index])),
-                          );
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16.0),
-                          child: Image.asset(searchResults[index].ImgSrc,
-                              height: 180.0, width: 180.0, fit: BoxFit.fill),
-                        ),
-                      ),
-                      Center(
-                          child: Text(
-                            searchResults[index].name,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                          )),
-                    ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: kDefaultPaddin),
+              child: GridView.builder(
+                  itemCount: searchResults.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: kDefaultPaddin,
+                    crossAxisSpacing: kDefaultPaddin,
+                    childAspectRatio: 0.75,
                   ),
-                );
-              }),
+                  itemBuilder: (context, index) => ItemCard(
+                    product: searchResults[index],
+                    press: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsScreen(
+                            product: searchResults[index],
+                          ),
+                        )),
+                  )),
             ),
           ),
         ]),

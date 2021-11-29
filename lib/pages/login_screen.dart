@@ -14,7 +14,7 @@ class LoginScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-              Image.asset('images/truck_icon.png'),
+              Image.asset('images/store.png'),
                 SizedBox(
                   height: 25,
                 ),

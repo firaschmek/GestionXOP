@@ -1,4 +1,4 @@
-import 'package:appgestion/model/product.dart';
+import 'package:appgestion/model/Product.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetail extends StatefulWidget {

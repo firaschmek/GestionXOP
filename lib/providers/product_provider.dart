@@ -1,24 +1,24 @@
-import 'package:appgestion/model/product.dart';
+import 'package:appgestion/model/Product.dart';
 
 class ProductProvider{
 
-  List<Product> _oilBank=[ Product("Huile1", "images/oil/0.png",17,5.0),
-    Product("Huile2", "images/oil/1.png",25,16.0),
-    Product("Huile3", "images/oil/2.png",35,17.0),
-    Product("Huile4", "images/oil/3.png",10,10.0),];
-  List<Product> _tomateBank=[ Product("tomate1", "images/tomate/0.png",17,5.0),
-    Product("tomate2", "images/tomate/1.png",25,16.0),
-    Product("tomate3", "images/tomate/2.png",35,17.0),
-    Product("tomate4", "images/tomate/3.png",10,10.0),];
-  List<Product> _conserveBank=[ Product("conserve1", "images/conserve/0.png",17,5.0),
-    Product("conserve2", "images/conserve/1.png",25,16.0),
-    Product("conserve3", "images/conserve/2.png",35,17.0),
-    Product("conserve4", "images/conserve/3.png",10,10.0),];
+  List<Product> _oilBank=[ Product("زيت الصافي", "images/oil/oil.png",17,5.0),
+    Product("زيت السنبلة", "images/oil/oil.png",25,16.0),
+    Product("زيت عباد الشمس", "images/oil/oil.png",35,17.0),
+    Product("زيت الشابة", "images/oil/oil.png",10,10.0),];
+  List<Product> _tomateBank=[ Product("حكة طماطم سيكام", "images/tomate/tomate.png",17,5.0),
+    Product("حكة طماطم الكاف", "images/tomate/tomate.png",25,16.0),
+    Product("حكة طماطم صاحب الجبل", "images/tomate/tomate.png",35,17.0),
+    Product("حكة طماطم سليانة", "images/tomate/tomate.png",10,10.0),];
+  List<Product> _conserveBank=[ Product("حكة معجون سفرجل", "images/conserve/jam.png",17,5.0),
+    Product("حكة معجون تفاح", "images/conserve/jam.png",25,16.0),
+    Product("حكة معجون", "images/conserve/jam.png",35,17.0),
+    Product("حكة معجو", "images/conserve/jam.png",10,10.0),];
 
-  List<Product> _jusBank=[ Product("jus1", "images/jus/0.png",17,5.0),
-    Product("jus2", "images/jus/1.png",25,16.0),
-    Product("jus3", "images/jus/2.png",35,17.0),
-    Product("jus4", "images/jus/3.png",10,10.0),];
+  List<Product> _jusBank=[ Product("باكو عصير برتقال", "images/jus/juice.png",17,5.0),
+    Product("باكو عصير سفرجل", "images/jus/juice.png",25,16.0),
+    Product("باكو عصير برتقال", "images/jus/juice.png",35,17.0),
+    Product("باكو عصير برتقال", "images/jus/juice.png",10,10.0),];
 
   List<Product> get oilBank => _oilBank;
 
@@ -26,15 +26,15 @@ class ProductProvider{
     _oilBank = value;
   }
 
-  List<Product> _chocolatBank=[ Product("chocolat1", "images/chocolat/0.png",17,5.0),
-    Product("chocolat2", "images/chocolat/1.png",25,16.0),
-    Product("chocolat3", "images/chocolat/2.png",35,17.0),
-    Product("chocolat4", "images/chocolat/3.png",10,10.0),];
+  List<Product> _chocolatBank=[ Product("باكو شكلاطة سعيد", "images/chocolat/chocolate.png",17,5.0),
+    Product("باكو شكلاطة سعيد", "images/chocolat/chocolate.png",25,16.0),
+    Product("باكو شكلاطة سعيد", "images/chocolat/chocolate.png",35,17.0),
+    Product("باكو شكلاطة سعي", "images/chocolat/chocolate.png",10,10.0),];
 
-  List<Product> _cafeBank=[ Product("cafe1", "images/cafe/0.png",17,5.0),
-    Product("cafe2", "images/cafe/1.png",25,16.0),
-    Product("cafe3", "images/cafe/2.png",35,17.0),
-    Product("cafe4", "images/cafe/3.png",10,10.0),];
+  List<Product> _cafeBank=[ Product("قهوة بن يدر", "images/cafe/cafe.png",17,5.0),
+    Product("قهوة بن يدر", "images/cafe/cafe.png",25,16.0),
+    Product("قهوة بن يدر", "images/cafe/cafe.png",35,17.0),
+    Product("قهوة بن يدر", "images/cafe/cafe.png",10,10.0),];
 
 
 
