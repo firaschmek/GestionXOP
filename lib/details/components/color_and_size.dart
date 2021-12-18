@@ -1,3 +1,4 @@
+import 'package:appgestion/model/Article.dart';
 import 'package:flutter/material.dart';
 import 'package:appgestion/constant/constants.dart';
 import 'package:appgestion/model/Product.dart';
@@ -5,10 +6,10 @@ import 'package:appgestion/model/Product.dart';
 class ColorAndSize extends StatelessWidget {
   const ColorAndSize({
     Key key,
-    @required this.product,
+    @required this.article,
   }) : super(key: key);
 
-  final Product product;
+  final Article article;
 
   @override
   Widget build(BuildContext context) {

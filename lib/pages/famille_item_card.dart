@@ -1,15 +1,17 @@
+import 'package:appgestion/model/Famille.dart';
+
 import 'package:flutter/material.dart';
-import 'package:appgestion/model/Product.dart';
+
 
 import 'package:appgestion/constant/constants.dart';
 
 
-class ItemCard extends StatelessWidget {
-  final Product product;
+class FamilleItemCard extends StatelessWidget {
+  final Famille famille;
   final Function press;
-  const ItemCard({
+  const FamilleItemCard({
     Key key,
-    this.product,
+    this.famille,
     this.press,
   }) : super(key: key);
 
@@ -23,34 +25,37 @@ class ItemCard extends StatelessWidget {
           Expanded(
             child: Container(
               padding: EdgeInsets.all(kDefaultPaddin),
+              margin: const EdgeInsets.all(5.0),
               // For  demo we use fixed height  and width
               // Now we dont need them
               // height: 180,
               // width: 160,
               decoration: BoxDecoration(
+
                 color: Colors.white,
                 border:  Border.all(color: Colors.grey),
                 borderRadius: BorderRadius.circular(16),
 
               ),
               child: Hero(
-                tag: "${product.name}",
-                child: Image.asset(product.ImgSrc),
+                tag: "${famille.lib_fam}",
+                child: Image.asset('images/familles/famille1.png'),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: kDefaultPaddin / 4),
+            padding: EdgeInsets.only(left: 50.0),
+
             child: Text(
               // products is out demo list
-              product.name,
-              style: TextStyle(color: kTextLightColor),
+              famille.lib_fam,
+              style: TextStyle(color: kTextLightColor, ),
             ),
           ),
-          Text(
-            "${product.price} DT",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          )
+          //Text(
+          //  "${product.price} DT",
+          //  style: TextStyle(fontWeight: FontWeight.bold),
+         // )
         ],
       ),
     );
