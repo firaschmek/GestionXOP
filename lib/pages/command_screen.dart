@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:appgestion/constant/constants.dart';
+import 'package:appgestion/model/CommandePourEnvoi.dart';
+import 'package:appgestion/model/Ligne.dart';
 import 'package:appgestion/model/Product.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +24,11 @@ class _CommandState extends State<Command> {
     getCommand();
   }
 
+  Future setCommand(List products) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('mycard', products);
+  }
+
   Future getCommand() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -31,21 +37,21 @@ class _CommandState extends State<Command> {
       products = new List();
     }
 
-
     for (var i = 0; i < products.length; i++) {
       var product = jsonDecode(products[i]);
       print(product);
-      print( product['price']);
-      total+= (double.parse(product['price'])*product['quantity']);
-
-
+      print(product['price']);
+      total += (double.parse(product['price']) * product['quantity']);
     }
-    print('command Prefs $products');
-    setState(() {});
+    print('command Prefs BOOOM $products');
+
   }
 
   @override
   Widget build(BuildContext context) {
+   // print("**************************");
+   // getCommand();
+    //print(products.length);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: buildAppBar(context),
@@ -55,7 +61,7 @@ class _CommandState extends State<Command> {
             child: ListView.builder(
               itemCount: products.length,
               itemBuilder: (context, index) {
-                return buildCommand(json.decode(products[index]));
+                return buildCommand(json.decode(products[index]),index,products,total);
               },
             ),
           ),
@@ -73,26 +79,53 @@ class _CommandState extends State<Command> {
                 'TOTAL : ${total} DT',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 25,
+                    fontSize: 20,
                     color: Colors.grey),
               ),
             ),
-
-
           ],
         ),
       ),
     );
   }
 
-  Widget buildCommand(var product) => ListTile(
+  Widget buildCommand(var product, int index, List products,double total) => ListTile(
         leading: Image.network(
           product['ImgSrc'],
           fit: BoxFit.cover,
           width: 50,
           height: 50,
         ),
-        title: Text(product['name']),
+        title: Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(child: Text(product['name'])),
+              Expanded(
+                  child: Text(
+                      (double.parse(product['price']) * product['quantity'])
+                              .toString() +
+                          " DT")),
+              Expanded(
+                child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18)),
+                    color: Colors.white,
+                    onPressed: () {
+                    // products.removeAt(index);
+                     // setCommand(products);
+
+                    },
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.blue,
+                      size: 35.0,
+                      semanticLabel: 'Text to announce in accessibility modes',
+                    )),
+              )
+            ],
+          ),
+        ),
         subtitle: Text(product['quantity'].toString()),
       );
 
@@ -132,9 +165,7 @@ class _CommandState extends State<Command> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           color: Colors.blue,
           onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("تم تفعيل الطلبية"),
-            ));
+            _sendCommand(products);
             _clearCommand();
           },
           child: Text(
@@ -150,10 +181,60 @@ class _CommandState extends State<Command> {
     );
   }
 
+  _sendCommand(List products) {
+    List<Product> lesVraisProduits = [];
+    List<Ligne> lignes = [];
+
+    for (var i = 0; i < products.length; i++) {
+      Map<String, dynamic> json = jsonDecode(products[i]);
+      lesVraisProduits.add(Product.fromJson(json));
+    }
+
+    for (var i = 0; i < lesVraisProduits.length; i++) {
+      print(lesVraisProduits[i].name);
+      Ligne ligne = new Ligne(lesVraisProduits[i].name,
+          lesVraisProduits[i].price, lesVraisProduits[i].quantity);
+      lignes.add(ligne);
+    }
+
+    CommandPourEnvoi commandPourEnvoi =
+        new CommandPourEnvoi("cltTest", DateTime.now(), lignes);
+    passerLacommande(commandPourEnvoi);
+
+
+  }
+
+  passerLacommande(CommandPourEnvoi commandPourEnvoi) async {
+    print("Send Commad");
+    print(jsonEncode(commandPourEnvoi.toJson()));
+    final response = await http.post(
+      Uri.parse('http://bm.shoptun.tk/admin/erp/commandelist'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(commandPourEnvoi.toJson()),
+    );
+    if (response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("تم تفعيل الطلبية"),
+      ));
+
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(" عطل أثناء عملية التفعيل الرجاء إعادة المحاولة"),
+      ));
+      throw Exception(response.body);
+    }
+  }
+
   _clearCommand() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('mycard');
-    prefs.setBool('cardVisibility', false);
-    setState(() {});
+
+
+    MaterialPageRoute(
+      builder: (context) => Command(),
+    );
+
   }
 }

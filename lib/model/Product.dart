@@ -19,4 +19,6 @@ class Product {
       'price': price,
     };
   }
+
+
 }

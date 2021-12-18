@@ -9,7 +9,7 @@ import 'package:appgestion/pages/sous_famille_item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 import 'command_screen.dart';
 
@@ -30,8 +30,8 @@ Future<List<SousFamille>> fetchSousFamilles(
       print(result);
       return result;
     }
-    print('query empty');
-    print(jsonResponse);
+
+
     return jsonResponse.map((data) => new SousFamille.fromJson(data)).toList();
   } else {
     throw Exception('Unexpected error occured!');

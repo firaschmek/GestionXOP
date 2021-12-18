@@ -30,8 +30,7 @@ Future<List<Famille>> fetchFamilles(String query) async {
       print(result);
       return result;
     }
-    print('query empty');
-    print(jsonResponse);
+
     return jsonResponse.map((data) => new Famille.fromJson(data)).toList();
   } else {
     throw Exception('Unexpected error occured!');

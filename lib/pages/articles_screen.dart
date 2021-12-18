@@ -31,8 +31,7 @@ Future<List<Article>> fetchArticle(String query, String cod_s_fam) async {
       print(result);
       return result;
     }
-    print('query empty');
-    print(jsonResponse);
+
     return jsonResponse.map((data) => new Article.fromJson(data)).toList();
   } else {
     throw Exception('Unexpected error occured!');

@@ -49,6 +49,8 @@ class ArticleItemCard extends StatelessWidget {
               style: TextStyle(color: kTextLightColor),
             ),
           ),
+
+
          // Text(
          //   "19 DT",
          //   style: TextStyle(fontWeight: FontWeight.bold),
