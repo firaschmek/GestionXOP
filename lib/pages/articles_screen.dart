@@ -4,14 +4,12 @@ import 'package:appgestion/constant/constants.dart';
 import 'package:appgestion/details/details_screen.dart';
 import 'package:appgestion/helpers/CardHelper.dart';
 import 'package:appgestion/model/Article.dart';
-import 'package:appgestion/model/SousFamille.dart';
 import 'package:appgestion/pages/article_item_card.dart';
-import 'package:appgestion/pages/sous_famille_item_card.dart';
 import 'package:appgestion/pages/sous_familles_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 import 'command_screen.dart';
 

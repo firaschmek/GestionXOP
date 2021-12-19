@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 
+import 'package:appgestion/helpers/UiHelper.dart';
 import 'package:appgestion/model/CommandePourEnvoi.dart';
 import 'package:appgestion/model/Ligne.dart';
 import 'package:appgestion/model/Product.dart';
+import 'package:appgestion/pages/familles_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -145,11 +148,18 @@ class _CommandScreenState extends State<CommandScreen> {
       backgroundColor: Colors.blue,
       elevation: 0,
       leading: IconButton(
-        icon: SvgPicture.asset(
-          'assets/icons/back.svg',
+        icon: Icon(
+          Icons.home,
           color: Colors.white,
+          size: 35.0,
+          semanticLabel: 'Text to announce in accessibility modes',
         ),
-        onPressed: () => Navigator.pop(context),
+        onPressed: () { Navigator.pop(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FamilleScreen(),
+            ));}
       ),
       actions: <Widget>[
         FlatButton(
@@ -157,9 +167,8 @@ class _CommandScreenState extends State<CommandScreen> {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           color: Colors.blue,
           onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("تم إلغاء الطلبية"),
-            ));
+            UiHelper.generateToast("تم إلغاء الطلبية", Colors.grey, Colors.black);
+
             _clearCommand();
             Navigator.pop(context);
             Navigator.push(
@@ -182,15 +191,20 @@ class _CommandScreenState extends State<CommandScreen> {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           color: Colors.blue,
           onPressed: () {
-            _sendCommand(products);
-            _clearCommand();
-            Navigator.pop(context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CommandScreen(),
-                ));
-          },
+            if(!products.isEmpty) {
+              _sendCommand(products);
+              _clearCommand();
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CommandScreen(),
+                  ));
+            }
+            else{
+             UiHelper.generateToast("الطلبية فارغة", Colors.red, Colors.white);
+
+            }},
           child: Text(
             "تفعيل الطلبية".toUpperCase(),
             style: TextStyle(
@@ -249,14 +263,11 @@ class _CommandScreenState extends State<CommandScreen> {
       body: jsonEncode(commandPourEnvoi.toJson()),
     );
     if (response.statusCode == 201) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("تم تفعيل الطلبية"),
-      ));
+      UiHelper.generateToast("تم تفعيل الطلبية", Colors.grey, Colors.black);
+
 
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(" عطل أثناء عملية التفعيل الرجاء إعادة المحاولة"),
-      ));
+      UiHelper.generateToast("عطل أثناء عملية التفعيل الرجاء إعادة المحاولة", Colors.red, Colors.white);
       throw Exception(response.body);
     }
   }

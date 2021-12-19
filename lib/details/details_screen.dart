@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:appgestion/helpers/CardHelper.dart';
+import 'package:appgestion/helpers/UiHelper.dart';
 import 'package:appgestion/model/Article.dart';
 import 'package:appgestion/pages/articles_screen.dart';
 import 'package:appgestion/pages/command_screen.dart';
@@ -172,12 +173,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     color: Colors.lightBlue,
                                     onPressed: () {
                                       widget.isvisible = true;
+                                      UiHelper.generateToast("تمت الإضافة إلى قائمة المشتريات بنجاح", Colors.grey, Colors.black);
 
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text(
-                                            "تمت الإضافة إلى قائمة المشتريات بنجاح"),
-                                      ));
                                       _addToCommand(
                                           widget.article,widget.numOfItems );
                                       Navigator.pop(context);
