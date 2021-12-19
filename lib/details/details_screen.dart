@@ -318,7 +318,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Command()),
+                  MaterialPageRoute(builder: (context) => CommandScreen()),
                 );
               },
             )

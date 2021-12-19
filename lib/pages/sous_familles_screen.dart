@@ -119,7 +119,7 @@ class _SousFamilleScreenState extends State<SousFamilleScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Command()),
+                    MaterialPageRoute(builder: (context) => CommandScreen()),
                   );
                 },
               )

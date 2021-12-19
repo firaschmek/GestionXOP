@@ -101,7 +101,7 @@ class _FamilleScreenState extends State<FamilleScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Command()),
+                    MaterialPageRoute(builder: (context) => CommandScreen()),
                   );
                 },
               )

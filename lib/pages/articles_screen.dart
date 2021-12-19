@@ -119,7 +119,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Command()),
+                    MaterialPageRoute(builder: (context) => CommandScreen()),
                   );
                 },
               )
