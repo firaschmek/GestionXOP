@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:appgestion/helpers/UiHelper.dart';
 import 'package:appgestion/model/CommandePourEnvoi.dart';
 import 'package:appgestion/model/Ligne.dart';
@@ -36,14 +35,11 @@ class _CommandScreenState extends State<CommandScreen> {
       products = new List();
     }
 
-
     for (var i = 0; i < products.length; i++) {
       var product = jsonDecode(products[i]);
       print(product);
-      print( product['price']);
-      total+= (double.parse(product['price'])*product['quantity']);
-
-
+      print(product['price']);
+      total += (double.parse(product['price']) * product['quantity']);
     }
     print('command Prefs $products');
     setState(() {});
@@ -62,7 +58,7 @@ class _CommandScreenState extends State<CommandScreen> {
               itemBuilder: (context, index) {
                 return Column(
                   children: [
-                    buildCommand(json.decode(products[index]),index,products ),
+                    buildCommand(json.decode(products[index]), index, products),
                     Divider(),
                   ],
                 );
@@ -87,95 +83,96 @@ class _CommandScreenState extends State<CommandScreen> {
                     color: Colors.grey),
               ),
             ),
-
-
           ],
         ),
       ),
     );
   }
 
-  Widget buildCommand(var product, int index , List products) => ListTile(
-    leading: Image.network(
-      product['ImgSrc'],
-      fit: BoxFit.cover,
-      width: 50,
-      height: 50,
-    ),
-    title: Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(child: Text(product['name'])),
-          Expanded(
-              child: Text(
-                  (double.parse(product['price']) * product['quantity'])
-                      .toString() +
-                      " DT")),
-          Expanded(
-            child: FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18)),
-                color: Colors.white,
-                onPressed: () {
-                   products.removeAt(index);
-                   setCommand(products);
-                   Navigator.pop(context);
-                   Navigator.push(
-                       context,
-                       MaterialPageRoute(
-                         builder: (context) => CommandScreen(),
-                       ));
-
-
-                },
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.blue,
-                  size: 35.0,
-                  semanticLabel: 'Text to announce in accessibility modes',
-                )),
-          )
-        ],
-      ),
-    ),
-    subtitle: Text(product['quantity'].toString()),
-  );
-
+  Widget buildCommand(var product, int index, List products) => ListTile(
+        leading: Image.network(
+          product['ImgSrc'],
+          fit: BoxFit.cover,
+          width: 50,
+          height: 50,
+        ),
+        title: Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(child: Text(product['name'])),
+              Expanded(
+                  child: Text(
+                      (double.parse(product['price']) * product['quantity'])
+                              .toString() +
+                          " DT")),
+              Expanded(
+                child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18)),
+                    color: Colors.white,
+                    onPressed: () {
+                      products.removeAt(index);
+                      setCommand(products);
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CommandScreen(),
+                          ));
+                    },
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.blue,
+                      size: 35.0,
+                      semanticLabel: 'Text to announce in accessibility modes',
+                    )),
+              )
+            ],
+          ),
+        ),
+        subtitle: Text(product['quantity'].toString()),
+      );
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.blue,
       elevation: 0,
       leading: IconButton(
-        icon: Icon(
-          Icons.home,
-          color: Colors.white,
-          size: 35.0,
-          semanticLabel: 'Text to announce in accessibility modes',
-        ),
-        onPressed: () { Navigator.pop(context);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FamilleScreen(),
-            ));}
-      ),
-      actions: <Widget>[
-        FlatButton(
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-          color: Colors.blue,
+          icon: Icon(
+            Icons.home,
+            color: Colors.white,
+            size: 35.0,
+            semanticLabel: 'Text to announce in accessibility modes',
+          ),
           onPressed: () {
-            UiHelper.generateToast("تم إلغاء الطلبية", Colors.grey, Colors.black);
-
-            _clearCommand();
             Navigator.pop(context);
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CommandScreen(),
+                  builder: (context) => FamilleScreen(),
                 ));
+          }),
+      actions: <Widget>[
+        FlatButton(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          color: Colors.blue,
+          onPressed: () {
+            if (!products.isEmpty) {
+              UiHelper.generateToast(
+                  "تم إلغاء الطلبية", Colors.grey, Colors.black);
+
+              _clearCommand();
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CommandScreen(),
+                  ));
+            } else {
+              UiHelper.generateToast("الطلبية فارغة", Colors.red, Colors.white);
+            }
           },
           child: Text(
             "إلغاء الطلبية".toUpperCase(),
@@ -188,10 +185,10 @@ class _CommandScreenState extends State<CommandScreen> {
         ),
         FlatButton(
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           color: Colors.blue,
           onPressed: () {
-            if(!products.isEmpty) {
+            if (!products.isEmpty) {
               _sendCommand(products);
               _clearCommand();
               Navigator.pop(context);
@@ -200,11 +197,10 @@ class _CommandScreenState extends State<CommandScreen> {
                   MaterialPageRoute(
                     builder: (context) => CommandScreen(),
                   ));
+            } else {
+              UiHelper.generateToast("الطلبية فارغة", Colors.red, Colors.white);
             }
-            else{
-             UiHelper.generateToast("الطلبية فارغة", Colors.red, Colors.white);
-
-            }},
+          },
           child: Text(
             "تفعيل الطلبية".toUpperCase(),
             style: TextStyle(
@@ -247,9 +243,8 @@ class _CommandScreenState extends State<CommandScreen> {
     }
 
     CommandPourEnvoi commandPourEnvoi =
-    new CommandPourEnvoi("cltTest", DateTime.now(), lignes);
+        new CommandPourEnvoi("cltTest", DateTime.now(), lignes);
     passerLacommande(commandPourEnvoi);
-
   }
 
   passerLacommande(CommandPourEnvoi commandPourEnvoi) async {
@@ -264,10 +259,9 @@ class _CommandScreenState extends State<CommandScreen> {
     );
     if (response.statusCode == 201) {
       UiHelper.generateToast("تم تفعيل الطلبية", Colors.grey, Colors.black);
-
-
     } else {
-      UiHelper.generateToast("عطل أثناء عملية التفعيل الرجاء إعادة المحاولة", Colors.red, Colors.white);
+      UiHelper.generateToast("عطل أثناء عملية التفعيل الرجاء إعادة المحاولة",
+          Colors.red, Colors.white);
       throw Exception(response.body);
     }
   }

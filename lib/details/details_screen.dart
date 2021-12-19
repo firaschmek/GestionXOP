@@ -6,6 +6,7 @@ import 'package:appgestion/model/Article.dart';
 import 'package:appgestion/pages/articles_screen.dart';
 import 'package:appgestion/pages/command_screen.dart';
 import 'package:appgestion/pages/sous_familles_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:appgestion/constant/constants.dart';
@@ -236,8 +237,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             Expanded(
                               child: Hero(
                                 tag: "${widget.article.lib_art}",
-                                child: Image.network(
-                                  widget.article.image,
+                                child: CachedNetworkImage(
+                                  imageUrl: article.image,
+                                  placeholder: (context, url) => new CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) => new Icon(Icons.error),
                                   fit: BoxFit.fill,
                                 ),
                               ),
