@@ -1,9 +1,13 @@
 import 'dart:convert';
 
 
+import 'package:appgestion/model/CommandePourEnvoi.dart';
+import 'package:appgestion/model/Ligne.dart';
+import 'package:appgestion/model/Product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class CommandScreen extends StatefulWidget {
   @override
@@ -53,7 +57,12 @@ class _CommandScreenState extends State<CommandScreen> {
             child: ListView.builder(
               itemCount: products.length,
               itemBuilder: (context, index) {
-                return buildCommand(json.decode(products[index]),index,products );
+                return Column(
+                  children: [
+                    buildCommand(json.decode(products[index]),index,products ),
+                    Divider(),
+                  ],
+                );
               },
             ),
           ),
@@ -71,7 +80,7 @@ class _CommandScreenState extends State<CommandScreen> {
                 'TOTAL : ${total} DT',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 25,
+                    fontSize: 20,
                     color: Colors.grey),
               ),
             ),
@@ -173,9 +182,7 @@ class _CommandScreenState extends State<CommandScreen> {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           color: Colors.blue,
           onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("تم تفعيل الطلبية"),
-            ));
+            _sendCommand(products);
             _clearCommand();
             Navigator.pop(context);
             Navigator.push(
@@ -207,5 +214,50 @@ class _CommandScreenState extends State<CommandScreen> {
   Future setCommand(List products) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setStringList('mycard', products);
+  }
+
+  _sendCommand(List products) {
+    List<Product> lesVraisProduits = [];
+    List<Ligne> lignes = [];
+
+    for (var i = 0; i < products.length; i++) {
+      Map<String, dynamic> json = jsonDecode(products[i]);
+      lesVraisProduits.add(Product.fromJson(json));
+    }
+
+    for (var i = 0; i < lesVraisProduits.length; i++) {
+      print(lesVraisProduits[i].name);
+      Ligne ligne = new Ligne(lesVraisProduits[i].name,
+          lesVraisProduits[i].price, lesVraisProduits[i].quantity);
+      lignes.add(ligne);
+    }
+
+    CommandPourEnvoi commandPourEnvoi =
+    new CommandPourEnvoi("cltTest", DateTime.now(), lignes);
+    passerLacommande(commandPourEnvoi);
+
+  }
+
+  passerLacommande(CommandPourEnvoi commandPourEnvoi) async {
+    print("Send Commad");
+    print(jsonEncode(commandPourEnvoi.toJson()));
+    final response = await http.post(
+      Uri.parse('http://bm.shoptun.tk/admin/erp/commandelist'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(commandPourEnvoi.toJson()),
+    );
+    if (response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("تم تفعيل الطلبية"),
+      ));
+
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(" عطل أثناء عملية التفعيل الرجاء إعادة المحاولة"),
+      ));
+      throw Exception(response.body);
+    }
   }
 }
