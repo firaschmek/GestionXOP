@@ -47,43 +47,48 @@ class _CommandScreenState extends State<CommandScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: buildAppBar(context),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    buildCommand(json.decode(products[index]), index, products),
-                    Divider(),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+    return new WillPopScope(
+      onWillPop: () async {
+        UiHelper.generateToast("استعمل زر التطبيق للعودة للقائمة الرئيسية", Colors.grey, Colors.black);
+        return false;},
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: buildAppBar(context),
+        body: Column(
+          children: <Widget>[
             Expanded(
-              child: Text(''),
-            ),
-            Expanded(
-              child: Text(
-                'TOTAL : ${total} DT',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.grey),
+              child: ListView.builder(
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      buildCommand(json.decode(products[index]), index, products),
+                      Divider(),
+                    ],
+                  );
+                },
               ),
             ),
           ],
+        ),
+        bottomNavigationBar: Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(''),
+              ),
+              Expanded(
+                child: Text(
+                  'TOTAL : ${total} DT',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.grey),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -100,7 +105,9 @@ class _CommandScreenState extends State<CommandScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(child: Text(product['name'])),
+              Expanded(
+                  flex: 3,
+                  child: Text(product['name'])),
               Expanded(
                   child: Text(
                       (double.parse(product['price']) * product['quantity'])
@@ -123,15 +130,15 @@ class _CommandScreenState extends State<CommandScreen> {
                     },
                     child: Icon(
                       Icons.delete,
-                      color: Colors.blue,
-                      size: 35.0,
+                      color: Colors.grey,
+                      size: 30.0,
                       semanticLabel: 'Text to announce in accessibility modes',
                     )),
               )
             ],
           ),
         ),
-        subtitle: Text(product['quantity'].toString()),
+        subtitle: Text(product['price'].toString() + " DT" + " x " + product['quantity'].toString() ),
       );
 
   AppBar buildAppBar(BuildContext context) {

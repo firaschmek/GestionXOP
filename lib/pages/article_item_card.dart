@@ -2,13 +2,12 @@ import 'package:appgestion/model/Article.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-
 import 'package:appgestion/constant/constants.dart';
-
 
 class ArticleItemCard extends StatelessWidget {
   final Article article;
   final Function press;
+
   const ArticleItemCard({
     Key key,
     this.article,
@@ -32,15 +31,15 @@ class ArticleItemCard extends StatelessWidget {
               // width: 160,
               decoration: BoxDecoration(
                 color: Colors.white,
-                border:  Border.all(color: Colors.grey),
+                border: Border.all(color: Colors.grey),
                 borderRadius: BorderRadius.circular(16),
-
               ),
               child: Hero(
-                tag: "${article.lib_art}",
+                tag: "${article.code_art}",
                 child: CachedNetworkImage(
                   imageUrl: article.image,
-                  placeholder: (context, url) => new CircularProgressIndicator(),
+                  placeholder: (context, url) =>
+                      new CircularProgressIndicator(),
                   errorWidget: (context, url, error) => new Icon(Icons.error),
                 ),
               ),
@@ -48,18 +47,26 @@ class ArticleItemCard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(left: 50.0),
-            child: Text(
-              // products is out demo list
-              article.lib_art,
-              style: TextStyle(color: kTextLightColor),
+            child: Column(
+              children: [
+                Text(
+                  // products is out demo list
+                  "${article.code_art}",
+                  style: TextStyle(color: kTextLightColor),
+                ),
+                Text(
+                  // products is out demo list
+                  "prix : ${article.prix} DT",
+                  style: TextStyle(color: kTextLightColor),
+                )
+              ],
             ),
           ),
 
-
-         // Text(
-         //   "19 DT",
-         //   style: TextStyle(fontWeight: FontWeight.bold),
-        //  )
+          // Text(
+          //   "19 DT",
+          //   style: TextStyle(fontWeight: FontWeight.bold),
+          //  )
         ],
       ),
     );

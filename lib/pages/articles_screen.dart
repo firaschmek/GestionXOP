@@ -20,7 +20,7 @@ Future<List<Article>> fetchArticle(String query, String cod_s_fam) async {
     List jsonResponse = json.decode(response.body);
     if (!query.isEmpty && query != null) {
       var result = jsonResponse
-          .where((element) => element['lib_art']
+          .where((element) => element['code_art']
               .toString()
               .toLowerCase()
               .contains(query.toLowerCase()))

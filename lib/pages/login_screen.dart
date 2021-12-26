@@ -89,14 +89,14 @@ class LoginScreen extends StatelessWidget {
                   height: 30,
                 ),
                 Divider(
-                  color: Colors.black,
+                  color: Colors.white,
                   height: 30,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '''ليس لديك حساب ؟''',
+                      '',
                       style: TextStyle(
                         color: Colors.black.withOpacity(0.5),
                         fontSize: 16.0,
@@ -106,7 +106,7 @@ class LoginScreen extends StatelessWidget {
                       onPressed: () {
                        // print('Sign Up');
                       },
-                      child: Text('سجل الآن'),
+                      child: Text(''),
                     )
                   ],
                 ),

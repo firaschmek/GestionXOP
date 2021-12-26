@@ -176,10 +176,20 @@ class _FamilleScreenState extends State<FamilleScreen> {
                 child: Column(
                   children: [
                     CircleAvatar(
-                        backgroundImage: AssetImage("images/person.jpeg")),
+                        backgroundImage: AssetImage("images/store.png")),
                     Text('Mohamed est connecté !'),
                   ],
                 ),
+              ),
+              ListTile(
+                trailing: Icon(Icons.lock),
+                title: Text('تغيير كلمة المرور'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                  );
+                },
               ),
               ListTile(
                 trailing: Icon(Icons.login_outlined),
@@ -191,6 +201,7 @@ class _FamilleScreenState extends State<FamilleScreen> {
                   );
                 },
               ),
+
             ],
           ),
         ),
