@@ -6,9 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/src/provider.dart';
 
-
- class UiHelper {
-   static  generateToast(String msg, Color backg, Color txtColor) {
+class UiHelper {
+  static generateToast(String msg, Color backg, Color txtColor) {
     Fluttertoast.showToast(
         msg: msg,
         toastLength: Toast.LENGTH_SHORT,
@@ -19,7 +18,7 @@ import 'package:provider/src/provider.dart';
         fontSize: 16.0);
   }
 
-  static AppBar createAppBar(BuildContext context){
+  static AppBar createAppBar(BuildContext context) {
     var cart = context.watch<CartModel>();
     return AppBar(
       backgroundColor: Colors.blue,
@@ -31,7 +30,6 @@ import 'package:provider/src/provider.dart';
         ),
         onPressed: () {
           Navigator.pop(context);
-
         },
       ),
       actions: <Widget>[
@@ -41,9 +39,14 @@ import 'package:provider/src/provider.dart';
                 width: 20,
                 height: 20,
                 decoration:
-                BoxDecoration(shape: BoxShape.circle, color: Colors.red),
-                child: Text( cart.item_count.toString())
-            ),
+                    BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(cart.item_count.toString()),
+                  ],
+                )),
             IconButton(
               icon: SvgPicture.asset("assets/icons/cart.svg"),
               onPressed: () {
