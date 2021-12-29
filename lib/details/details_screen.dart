@@ -1,18 +1,15 @@
 import 'dart:convert';
-
 import 'package:appgestion/helpers/CardHelper.dart';
 import 'package:appgestion/helpers/UiHelper.dart';
 import 'package:appgestion/model/Article.dart';
-import 'package:appgestion/pages/articles_screen.dart';
-import 'package:appgestion/pages/command_screen.dart';
-import 'package:appgestion/pages/sous_familles_screen.dart';
+import 'package:appgestion/model/cart_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:appgestion/constant/constants.dart';
 import 'package:appgestion/model/Product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:provider/provider.dart';
 import 'components/color_and_size.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -31,37 +28,26 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   final Article article;
 
+
   _DetailsScreenState(this.article);
 
   @override
   initState() {
     // TODO: implement initState
     super.initState();
-    getcardVisVar();
-  }
 
-  Future getcardVisVar() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    widget.isvisible = prefs.getBool('cardVisibility');
-    print(" ICI ON RECUPERE LA VISIBILITE DE CARD");
-    print(widget.isvisible);
   }
 
   @override
   Widget build(BuildContext context) {
+
+    var cart = context.watch<CartModel>();
     Size size = MediaQuery.of(context).size;
-    print(" ICI ON BUILD");
-    getcardVisVar();
-    return new WillPopScope(
-      onWillPop: () async {
-        UiHelper.generateToast(
-            "استعمل زر التطبيق للرجوع للوراء", Colors.grey, Colors.black);
-        return false;
-      },
-      child: Scaffold(
+
+    return  Scaffold(
         // each product have a color
         backgroundColor: Colors.white,
-        appBar: buildAppBar(context),
+        appBar: UiHelper.createAppBar(context),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -181,19 +167,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             "تمت الإضافة إلى قائمة المشتريات بنجاح",
                                             Colors.grey,
                                             Colors.black);
+                                        Product product =
+                                        new Product(article.code_art, article.image, widget.numOfItems , article.prix);
+                                        cart.addToItems(product);
 
-                                        _addToCommand(
-                                            widget.article, widget.numOfItems);
-                                        Navigator.pop(context);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  DetailsScreen(
-                                                      widget.article,
-                                                      widget.cod_s_fam,
-                                                      widget.cod_fam),
-                                            ));
+
+
                                       },
                                       child: Text(
                                         "أضف إلى الطلبية".toUpperCase(),
@@ -271,79 +250,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ],
           ),
         ),
-      ),
+
     );
   }
 
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.blue,
-      elevation: 0,
-      leading: IconButton(
-        icon: SvgPicture.asset(
-          'assets/icons/back.svg',
-          color: Colors.white,
-        ),
-        onPressed: () {
-          Navigator.pop(context);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    ArticleScreen(widget.cod_s_fam, widget.cod_fam),
-              ));
-        },
-      ),
-      actions: <Widget>[
-        Stack(
-          children: <Widget>[
-            Container(
-              width: 20,
-              height: 20,
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: Colors.red),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  FutureBuilder<String>(
-                    future: CardHelper.getCommandSize(),
-                    // a previously-obtained Future<String> or null
-                    builder:
-                        (BuildContext context, AsyncSnapshot<String> snapshot) {
-                      List<Widget> children;
-                      if (snapshot.hasData) {
-                        children = <Widget>[
-                          // Text('Result: ${snapshot.data}'),
-                          Text('${snapshot.data}'),
-                        ];
-                      }
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: children,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            IconButton(
-              icon: SvgPicture.asset("assets/icons/cart.svg"),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CommandScreen()),
-                );
-              },
-            )
-          ],
-        ),
-        SizedBox(width: kDefaultPaddin / 2)
-      ],
-    );
-  }
 
   SizedBox buildOutlineButton({IconData icon, Function press}) {
     return SizedBox(
@@ -360,21 +270,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 
-  _addToCommand(Article article, int numbOfItems) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    print('THE RESULT OF SharedPreferences');
-    Product product =
-        new Product(article.code_art, article.image, numbOfItems, article.prix);
-
-    List<String> commandMap = prefs.getStringList('mycard');
-    if (commandMap == null) {
-      commandMap = new List();
-    }
-    var jsonEncode2 = jsonEncode(product);
-    commandMap.add(jsonEncode2);
-    await prefs.setStringList('mycard', commandMap);
-    print(jsonEncode2);
-    //cardVisibility
-    prefs.setBool('cardVisibility', true);
-  }
 }
+
+

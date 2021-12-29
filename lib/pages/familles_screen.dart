@@ -1,17 +1,13 @@
 import 'dart:convert';
 
 import 'package:appgestion/constant/constants.dart';
-import 'package:appgestion/helpers/CardHelper.dart';
 import 'package:appgestion/helpers/UiHelper.dart';
 import 'package:appgestion/model/Famille.dart';
 
 import 'package:appgestion/pages/famille_item_card.dart';
 import 'package:appgestion/pages/sous_familles_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
-
-import 'command_screen.dart';
 import 'login_screen.dart';
 
 Future<List<Famille>> fetchFamilles(String query) async {
@@ -54,64 +50,8 @@ class _FamilleScreenState extends State<FamilleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
-      onWillPop: () async {
-        UiHelper.generateToast(
-            "استعمل زر الخروج من التطبيق", Colors.grey, Colors.black);
-        return false;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            Stack(
-              children: <Widget>[
-                Container(
-                  width: 20,
-                  height: 20,
-                  decoration:
-                      BoxDecoration(shape: BoxShape.circle, color: Colors.red),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      FutureBuilder<String>(
-                        future: CardHelper.getCommandSize(),
-                        // a previously-obtained Future<String> or null
-                        builder: (BuildContext context,
-                            AsyncSnapshot<String> snapshot) {
-                          List<Widget> children;
-                          if (snapshot.hasData) {
-                            children = <Widget>[
-                              // Text('Result: ${snapshot.data}'),
-                              Text('${snapshot.data}'),
-                            ];
-                          }
-                          return Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: children,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  icon: SvgPicture.asset("assets/icons/cart.svg"),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CommandScreen()),
-                    );
-                  },
-                )
-              ],
-            ),
-            SizedBox(width: kDefaultPaddin / 2)
-          ],
-          title: Text('Familles'),
-        ),
+    return  Scaffold(
+        appBar: UiHelper.createAppBar(context),
         body: Container(
           child: Column(children: [
             Padding(
@@ -205,7 +145,7 @@ class _FamilleScreenState extends State<FamilleScreen> {
             ],
           ),
         ),
-      ),
+
     );
   }
 }

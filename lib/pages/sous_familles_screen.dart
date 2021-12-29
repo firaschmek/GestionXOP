@@ -64,76 +64,8 @@ class _SousFamilleScreenState extends State<SousFamilleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
-      onWillPop: () async { 
-        UiHelper.generateToast("استعمل زر التطبيق للرجوع للوراء", Colors.grey, Colors.black);
-        return false;},
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: SvgPicture.asset(
-              'assets/icons/back.svg',
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FamilleScreen(),
-                  ));
-            },
-          ),
-          actions: <Widget>[
-            Stack(
-              children: <Widget>[
-                Container(
-                  width: 20,
-                  height: 20,
-                  decoration:
-                      BoxDecoration(shape: BoxShape.circle, color: Colors.red),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      FutureBuilder<String>(
-                        future: CardHelper.getCommandSize(),
-                        // a previously-obtained Future<String> or null
-                        builder: (BuildContext context,
-                            AsyncSnapshot<String> snapshot) {
-                          List<Widget> children;
-                          if (snapshot.hasData) {
-                            children = <Widget>[
-                              // Text('Result: ${snapshot.data}'),
-                              Text('${snapshot.data}'),
-                            ];
-                          }
-                          return Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: children,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  icon: SvgPicture.asset("assets/icons/cart.svg"),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CommandScreen()),
-                    );
-                  },
-                )
-              ],
-            ),
-            SizedBox(width: kDefaultPaddin / 2)
-          ],
-          title: Text('Sous Familles'),
-        ),
+    return  Scaffold(
+        appBar: UiHelper.createAppBar(context),
         body: Container(
           child: Column(children: [
             Padding(
@@ -182,7 +114,6 @@ class _SousFamilleScreenState extends State<SousFamilleScreen> {
             ),
           ]),
         ),
-      ),
     );
   }
 }

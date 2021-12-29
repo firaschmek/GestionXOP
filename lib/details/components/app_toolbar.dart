@@ -3,23 +3,14 @@ import 'package:appgestion/model/cart_model.dart';
 import 'package:appgestion/pages/command_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/src/provider.dart';
 
+ class AppToolBar extends AppBar {
 
- class UiHelper {
-   static  generateToast(String msg, Color backg, Color txtColor) {
-    Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: backg,
-        textColor: txtColor,
-        fontSize: 16.0);
-  }
 
-  static AppBar createAppBar(BuildContext context){
+
+  @override
+  Widget build(BuildContext context) {
     var cart = context.watch<CartModel>();
     return AppBar(
       backgroundColor: Colors.blue,

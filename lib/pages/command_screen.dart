@@ -4,11 +4,10 @@ import 'package:appgestion/helpers/UiHelper.dart';
 import 'package:appgestion/model/CommandePourEnvoi.dart';
 import 'package:appgestion/model/Ligne.dart';
 import 'package:appgestion/model/Product.dart';
+import 'package:appgestion/model/cart_model.dart';
 import 'package:appgestion/pages/familles_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/src/provider.dart';
 import 'package:http/http.dart' as http;
 
 class CommandScreen extends StatefulWidget {
@@ -17,86 +16,54 @@ class CommandScreen extends StatefulWidget {
 }
 
 class _CommandScreenState extends State<CommandScreen> {
-  List products = new List();
-  double total = 0;
-
-  @override
-  initState() {
-    // TODO: implement initState
-    super.initState();
-    getCommand();
-  }
-
-  Future getCommand() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    products = prefs.getStringList('mycard');
-    if (products == null) {
-      products = new List();
-    }
-
-    for (var i = 0; i < products.length; i++) {
-      var product = jsonDecode(products[i]);
-      print(product);
-      print(product['price']);
-      total += (double.parse(product['price']) * product['quantity']);
-    }
-    print('command Prefs $products');
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
-      onWillPop: () async {
-        UiHelper.generateToast("استعمل زر التطبيق للعودة للقائمة الرئيسية", Colors.grey, Colors.black);
-        return false;},
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: buildAppBar(context),
-        body: Column(
-          children: <Widget>[
+    var cart = context.watch<CartModel>();
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: buildAppBar(context),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: ListView.builder(
+              itemCount: cart.items.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    buildCommandItem(cart.items[index], cart),
+                    Divider(),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
             Expanded(
-              child: ListView.builder(
-                itemCount: products.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      buildCommand(json.decode(products[index]), index, products),
-                      Divider(),
-                    ],
-                  );
-                },
+              child: Text(''),
+            ),
+            Expanded(
+              child: Text(
+                'TOTAL : ${cart.totalPrice} DT',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.grey),
               ),
             ),
           ],
-        ),
-        bottomNavigationBar: Container(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Text(''),
-              ),
-              Expanded(
-                child: Text(
-                  'TOTAL : ${total} DT',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.grey),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
   }
 
-  Widget buildCommand(var product, int index, List products) => ListTile(
+  Widget buildCommandItem(Product product, CartModel cart) => ListTile(
         leading: Image.network(
-          product['ImgSrc'],
+          product.ImgSrc,
           fit: BoxFit.cover,
           width: 50,
           height: 50,
@@ -105,28 +72,18 @@ class _CommandScreenState extends State<CommandScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Expanded(flex: 3, child: Text(product.name)),
               Expanded(
-                  flex: 3,
-                  child: Text(product['name'])),
-              Expanded(
-                  child: Text(
-                      (double.parse(product['price']) * product['quantity'])
-                              .toString() +
-                          " DT")),
+                  child: Text((double.parse(product.price) * product.quantity)
+                          .toString() +
+                      " DT")),
               Expanded(
                 child: FlatButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18)),
                     color: Colors.white,
                     onPressed: () {
-                      products.removeAt(index);
-                      setCommand(products);
-                      Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CommandScreen(),
-                          ));
+                      cart.removeFromItems(product);
                     },
                     child: Icon(
                       Icons.delete,
@@ -138,10 +95,14 @@ class _CommandScreenState extends State<CommandScreen> {
             ],
           ),
         ),
-        subtitle: Text(product['price'].toString() + " DT" + " x " + product['quantity'].toString() ),
+        subtitle: Text(product.price.toString() +
+            " DT" +
+            " x " +
+            product.quantity.toString()),
       );
 
   AppBar buildAppBar(BuildContext context) {
+    var cart = context.watch<CartModel>();
     return AppBar(
       backgroundColor: Colors.blue,
       elevation: 0,
@@ -166,17 +127,10 @@ class _CommandScreenState extends State<CommandScreen> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           color: Colors.blue,
           onPressed: () {
-            if (!products.isEmpty) {
+            if (cart.items.isNotEmpty) {
               UiHelper.generateToast(
                   "تم إلغاء الطلبية", Colors.grey, Colors.black);
-
-              _clearCommand();
-              Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CommandScreen(),
-                  ));
+              cart.clearItems();
             } else {
               UiHelper.generateToast("الطلبية فارغة", Colors.red, Colors.white);
             }
@@ -195,15 +149,9 @@ class _CommandScreenState extends State<CommandScreen> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           color: Colors.blue,
           onPressed: () {
-            if (!products.isEmpty) {
-              _sendCommand(products);
-              _clearCommand();
-              Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CommandScreen(),
-                  ));
+            if (cart.items.isNotEmpty) {
+              _sendCommand(cart.items);
+              cart.clearItems();
             } else {
               UiHelper.generateToast("الطلبية فارغة", Colors.red, Colors.white);
             }
@@ -221,31 +169,12 @@ class _CommandScreenState extends State<CommandScreen> {
     );
   }
 
-  _clearCommand() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('mycard');
-    prefs.setBool('cardVisibility', false);
-    setState(() {});
-  }
-
-  Future setCommand(List products) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('mycard', products);
-  }
-
-  _sendCommand(List products) {
-    List<Product> lesVraisProduits = [];
+  _sendCommand(List<Product> products) {
     List<Ligne> lignes = [];
-
     for (var i = 0; i < products.length; i++) {
-      Map<String, dynamic> json = jsonDecode(products[i]);
-      lesVraisProduits.add(Product.fromJson(json));
-    }
+      Ligne ligne =
+          new Ligne(products[i].name, products[i].price, products[i].quantity);
 
-    for (var i = 0; i < lesVraisProduits.length; i++) {
-      print(lesVraisProduits[i].name);
-      Ligne ligne = new Ligne(lesVraisProduits[i].name,
-          lesVraisProduits[i].price, lesVraisProduits[i].quantity);
       lignes.add(ligne);
     }
 
