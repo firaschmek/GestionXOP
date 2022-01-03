@@ -62,4 +62,43 @@ class UiHelper {
       ],
     );
   }
+
+
+
+  static AppBar createAppBarForHomeScreen(BuildContext context) {
+    var cart = context.watch<CartModel>();
+    return AppBar(
+      backgroundColor: Colors.blue,
+      elevation: 0,
+      actions: <Widget>[
+        Stack(
+          children: <Widget>[
+            Container(
+                width: 20,
+                height: 20,
+                decoration:
+                BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(cart.item_count.toString()),
+                  ],
+                )),
+            IconButton(
+              icon: SvgPicture.asset("assets/icons/cart.svg"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CommandScreen()),
+                );
+              },
+            )
+          ],
+        ),
+        SizedBox(width: kDefaultPaddin / 2)
+      ],
+    );
+  }
+
 }

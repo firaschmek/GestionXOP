@@ -168,7 +168,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             Colors.grey,
                                             Colors.black);
                                         Product product =
-                                        new Product(article.code_art, article.image, widget.numOfItems , article.prix);
+                                        new Product(article.code_art,article.lib_art, article.image, widget.numOfItems , article.prix);
                                         cart.addToItems(product);
 
 
@@ -198,7 +198,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            widget.article.code_art,
+                            widget.article.lib_art,
                             style: Theme.of(context)
                                 .textTheme
                                 .headline4

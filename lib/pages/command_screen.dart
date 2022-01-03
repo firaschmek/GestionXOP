@@ -72,11 +72,11 @@ class _CommandScreenState extends State<CommandScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(flex: 3, child: Text(product.name)),
+              Expanded(flex: 3, child: Text(product.libele , style: TextStyle(fontSize: 12),)),
               Expanded(
                   child: Text((double.parse(product.price) * product.quantity)
                           .toString() +
-                      " DT")),
+                      " DT", style: TextStyle(fontSize: 12),)),
               Expanded(
                 child: FlatButton(
                     shape: RoundedRectangleBorder(
@@ -88,7 +88,7 @@ class _CommandScreenState extends State<CommandScreen> {
                     child: Icon(
                       Icons.delete,
                       color: Colors.grey,
-                      size: 30.0,
+                      size: 25.0,
                       semanticLabel: 'Text to announce in accessibility modes',
                     )),
               )
@@ -98,7 +98,7 @@ class _CommandScreenState extends State<CommandScreen> {
         subtitle: Text(product.price.toString() +
             " DT" +
             " x " +
-            product.quantity.toString()),
+            product.quantity.toString(), style: TextStyle(fontSize: 12)),
       );
 
   AppBar buildAppBar(BuildContext context) {

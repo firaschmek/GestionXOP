@@ -51,7 +51,7 @@ class _FamilleScreenState extends State<FamilleScreen> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-        appBar: UiHelper.createAppBar(context),
+        appBar: UiHelper.createAppBarForHomeScreen(context),
         body: Container(
           child: Column(children: [
             Padding(

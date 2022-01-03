@@ -35,7 +35,7 @@ class ArticleItemCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Hero(
-                tag: "${article.code_art}",
+                tag: "${article.lib_art}",
                 child: CachedNetworkImage(
                   imageUrl: article.image,
                   placeholder: (context, url) =>
@@ -46,18 +46,22 @@ class ArticleItemCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 50.0),
+            padding: EdgeInsets.only(left: 30.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   // products is out demo list
-                  "${article.code_art}",
+                  "${article.lib_art}",
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(color: kTextLightColor),
                 ),
                 Text(
                   // products is out demo list
                   "prix : ${article.prix} DT",
-                  style: TextStyle(color: kTextLightColor),
+
+                  style: TextStyle(color: kTextLightColor ),
                 )
               ],
             ),
