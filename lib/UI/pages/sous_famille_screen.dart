@@ -52,6 +52,7 @@ class _SousFamilleScreenState extends State<SousFamilleScreen> {
                   return Loading(loadingMessage: snapshot.data.message);
                   break;
                 case Status.COMPLETED:
+
                   return SousFamilleList(familleList: snapshot.data.data);
                   break;
                 case Status.ERROR:
@@ -86,7 +87,9 @@ class _SousFamilleListState extends State<SousFamilleList> {
   @override
   void initState() {
     super.initState();
+    print("SOUFamille");
     widget.queryList = widget.familleList;
+
   }
 
   @override

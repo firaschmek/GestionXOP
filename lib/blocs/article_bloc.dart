@@ -26,7 +26,7 @@ class ArticleBloc {
   }
 
   fetchArticleList(cod_s_fam) async {
-    articleListSink.add(ApiResponse.loading('Fetching Article'));
+    articleListSink.add(ApiResponse.loading(""));
     try {
       List<Article> articles = await _articleRepository.fetchArticle(cod_s_fam);
       articleListSink.add(ApiResponse.completed(articles));

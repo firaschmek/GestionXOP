@@ -1,14 +1,14 @@
-class CommandItemEntity {
+class Product {
   String name;
   String libele;
   String ImgSrc;
   int quantity;
   String price;
 
-  CommandItemEntity(this.name, this.libele,this.ImgSrc, this.quantity, this.price);
+  Product(this.name, this.libele,this.ImgSrc, this.quantity, this.price);
 
-  factory CommandItemEntity.fromJson(Map<String, dynamic> json) {
-    return new CommandItemEntity(
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return new Product(
         json['name'],json['libele'], json['ImgSrc'], json['quantity'], json['price']);
   }
 

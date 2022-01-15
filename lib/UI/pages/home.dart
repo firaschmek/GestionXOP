@@ -1,9 +1,12 @@
+import 'package:appgestion/UI/pages/command_screen.dart';
 import 'package:appgestion/UI/pages/products_screen.dart';
 import 'package:appgestion/UI/pages/sous_famille_screen.dart';
 import 'package:appgestion/UI/widgets/nav_bar.dart';
 import 'package:appgestion/UI/pages/famille_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'article_detail.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -23,7 +26,7 @@ class _HomeState extends State<Home> {
     //FamilleScreen(),
     ApplicationNavigator(),
 
-    Container(),
+    CommandScreen(),
     Container(),
   ]);
 
@@ -76,6 +79,9 @@ class ApplicationNavigator extends StatelessWidget {
                   break;
                 case '/articleList':
                   return ArticleScreen();
+                  break;
+                case '/articleDetail':
+                  return ArticleDetailScreen();
                   break;
 
               }

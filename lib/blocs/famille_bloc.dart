@@ -24,7 +24,7 @@ class FamilleBloc {
   }
 
   fetchFamilleList() async {
-    familleListSink.add(ApiResponse.loading('Fetching Familles'));
+    familleListSink.add(ApiResponse.loading(''));
     try {
       List<Famille> familles = await _familleRepository.fetchFamille();
       familleListSink.add(ApiResponse.completed(familles));

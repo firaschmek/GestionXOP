@@ -11,48 +11,46 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     //final cartBloc = BlocProvider.of<CartBloc>(context);
 
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        children: [
-          ListTile(
-
-            title: Text(_article.lib_art),
-            subtitle: Text(
-              _article.prix,
-              style: TextStyle(color: Colors.black.withOpacity(0.6)),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: CachedNetworkImage(
-              imageUrl: _article.image,
-              height: 100,
-              placeholder: (context, url) => new CircularProgressIndicator(),
-              errorWidget: (context, url, error) => new Icon(Icons.error),
-            ),
-          ),
-          ButtonBar(
-            alignment: MainAxisAlignment.start,
-            children: [
-              FlatButton(
-                textColor: const Color(0xFF6200EE),
-                onPressed: () {
-                  // Perform some action
-                },
-                child: const Text('ACTION 1'),
-              ),
-              FlatButton(
-                textColor: const Color(0xFF6200EE),
-                onPressed: () {
-                  // Perform some action
-                },
-                child: const Text('ACTION 2'),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+    return buildCard(_article, context);
   }
+}
+
+Container buildCard(Article article, BuildContext context) {
+  return Container(
+    margin: EdgeInsets.all(8.0),
+    child: Card(
+      shape: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: Colors.lightGreen)),
+      child: InkWell(
+        onTap: () => Navigator.pushNamed(
+          context,
+          '/articleDetail',
+          arguments: {'article': article},
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8.0),
+                topRight: Radius.circular(8.0),
+              ),
+              child: CachedNetworkImage(
+                  imageUrl: article.image,
+                  placeholder: (context, url) =>
+                      new CircularProgressIndicator(color: Colors.lightGreen),
+                  errorWidget: (context, url, error) => new Icon(Icons.error),
+                  height: 120,
+                  fit: BoxFit.fill),
+            ),
+            ListTile(
+              title: Text(article.lib_art,  overflow: TextOverflow.ellipsis,),
+              subtitle: Text(article.prix + "DT"),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

@@ -1,19 +1,24 @@
-
 import 'package:flutter/foundation.dart';
 
 import 'commande_item.dart';
 
 class CartModel extends ChangeNotifier {
   int item_count = 0;
-  List<CommandItem> _items = [];
+  List<CommandItemEntity> _items = [];
 
-  void addToItems(CommandItem p) {
+  void addToItems(CommandItemEntity p) {
     _items.add(p);
     item_count++;
     notifyListeners();
   }
 
-  void removeFromItems(CommandItem p) {
+  double sousTotal() {
+    double total = _items.fold(
+        0, (sum, item) => sum + double.parse(item.price) * item.quantity);
+    return total;
+  }
+
+  void removeFromItems(CommandItemEntity p) {
     _items.remove(p);
     item_count--;
     notifyListeners();
@@ -27,8 +32,8 @@ class CartModel extends ChangeNotifier {
 
   double get totalPrice => _items.fold(
       0,
-          (total, current) =>
-      total + double.parse(current.price) * current.quantity);
+      (total, current) =>
+          total + double.parse(current.price) * current.quantity);
 
-  List<CommandItem> get items => _items;
+  List<CommandItemEntity> get items => _items;
 }
