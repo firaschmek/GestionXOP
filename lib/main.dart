@@ -1,10 +1,18 @@
+
+import 'package:appgestion/UI/pages/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:appgestion/pages/login_screen.dart';
+import 'package:flutter/services.dart';
+
 import 'package:provider/provider.dart';
 
-import 'model/cart_model.dart';
+import 'models/cart_model.dart';
+
+
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
   runApp(
     ChangeNotifierProvider(
       create: (context) => CartModel(),
